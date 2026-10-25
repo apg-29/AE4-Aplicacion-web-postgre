@@ -1,12 +1,12 @@
 # AE4 — Aplicación web con base de datos en contenedores
 
-## 1. Objetivo del proyecto
+## Objetivo del proyecto
 
 El objetivo de esta práctica es desplegar una aplicación web contenerizada con Django y Gunicorn, PostgreSQL como base de datos, pgAdmin para administrar los datos y nginx como proxy inverso.
 
 La infraestructura se definirá mediante Docker Compose. El despliegue se automatizará con un script `deploy.sh` y se comprobará mediante comandos estándar.
 
-## 2. Arquitectura
+## Arquitectura
 
 El proyecto estará formado por cuatro servicios:
 
@@ -46,3 +46,23 @@ Se ha adaptado el archivo compose.yml para definir los cuatro servicios exigidos
 La configuración contempla variables de entorno para las credenciales, volúmenes para conservar los datos y comprobaciones de salud para coordinar el arranque de los servicios.
 
 Los puertos publicados serán el 8000 para acceder a la aplicación web y el 5050 para acceder a pgAdmin. Los puertos internos de Django y PostgreSQL no se publicarán directamente en el anfitrión.
+
+## Configuración nginx
+
+Se ha creado el archivo nginx/default.conf a partir del material de referencia:
+
+```text
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        proxy_pass http://app:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+```
+
+NGINX reenvía las peticiones al servidor Django ejecutado mediante Gunicorn, accesible a través de la red interna de Docker Compose.
