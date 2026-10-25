@@ -213,3 +213,20 @@ Para eliminar también los volúmenes y los datos almacenados en ellos:
 ```bash
 docker compose down -v
 ```
+
+## Resultados de las comprobaciones
+
+El despliegue se ha realizado mediante `./deploy.sh`.
+
+Se ha comprobado que:
+
+- Los cuatro servicios arrancan correctamente.
+- La aplicación responde a través de Nginx.
+- El endpoint `/healthz` devuelve HTTP 200.
+- El endpoint `/api/lugares` devuelve los 11 lugares de PostgreSQL.
+- La tabla `places` contiene 11 registros.
+- Los datos persisten después de reiniciar los servicios.
+
+## Repositorio Remoto
+
+Repositorio de la tarea AE4: https://github.com/apg-29/AE4-Aplicacion-web-postgre

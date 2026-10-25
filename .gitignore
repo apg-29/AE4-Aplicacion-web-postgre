@@ -1,0 +1,20 @@
+#Variables de entorno
+.env
+
+#Python
+pycache/
+*.py[cod]
+*.pyo
+
+#Entornos virtuales
+.venv/
+venv/
+env/
+
+#Datos locales de la aplicación
+data/
+
+#Archivos temporales y logs
+*.log
+.DS_Store
+Thumbs.db

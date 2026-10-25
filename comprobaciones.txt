@@ -1,0 +1,210 @@
+========================================
+COMPROBACIONES AE4
+Fecha: dom 25 oct 2026 22:05:27 WET
+========================================
+
+### 1. Estado de los servicios
+ Container dpl-nginx Running 
+ Container dpl-db Running 
+ Container dpl-pgadmin Running 
+ Container dpl-django Running 
+ Container dpl-db Waiting 
+ Container dpl-db Waiting 
+ Container dpl-db Healthy 
+ Container dpl-django Waiting 
+ Container dpl-db Healthy 
+ Container dpl-django Healthy 
+NAME          IMAGE                 COMMAND                  SERVICE   CREATED             STATUS                       PORTS
+dpl-db        postgres:16-alpine    "docker-entrypoint.s…"   db        About an hour ago   Up 16 minutes (healthy)      5432/tcp
+dpl-django    dpl-app-app           "gunicorn config.wsg…"   app       About an hour ago   Up 3 minutes (healthy)       8000/tcp
+dpl-nginx     nginx:1.27-alpine     "/docker-entrypoint.…"   nginx     About an hour ago   Up About an hour             0.0.0.0:8000->80/tcp, [::]:8000->80/tcp
+dpl-pgadmin   dpage/pgadmin4:9.17   "/entrypoint.sh"         pgadmin   About an hour ago   Up About an hour (healthy)   443/tcp, 0.0.0.0:5050->80/tcp, [::]:5050->80/tcp
+
+### 2. Página principal
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   305    0   305    0     0  37258      0 --:--:-- --:--:-- --:--:-- 38125
+HTTP/1.1 200 OK
+Server: nginx/1.27.5
+Date: Sun, 25 Oct 2026 22:05:29 GMT
+Content-Type: text/html; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Hola desde el servidor de aplicaciones DPL (UT4)</title></head>
+<body>
+<h1>Hola desde el servidor de aplicaciones DPL (UT4)</h1>
+<p>Contenedor: <strong>2cf4dd91ca56</strong></p>
+<p>Visitas totales: <strong>4</strong></p>
+</body>
+</html>
+
+### 3. Endpoint de salud
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    44    0    44    0     0   1929      0 --:--:-- --:--:-- --:--:--  2000
+HTTP/1.1 200 OK
+Server: nginx/1.27.5
+Date: Sun, 25 Oct 2026 22:05:29 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+{"status": "ok", "hostname": "2cf4dd91ca56"}
+### 4. API del mensaje
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   123    0   123    0     0  45038      0 --:--:-- --:--:-- --:--:-- 61500
+HTTP/1.1 200 OK
+Server: nginx/1.27.5
+Date: Sun, 25 Oct 2026 22:05:29 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+{"mensaje": "Hola desde el servidor de aplicaciones DPL (UT4)", "hostname": "2cf4dd91ca56", "fecha": "2026-10-25T23:05:29"}
+### 5. API de lugares
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   558    0   558    0     0   6974      0 --:--:-- --:--:-- --:--:--  7063
+HTTP/1.1 200 OK
+Server: nginx/1.27.5
+Date: Sun, 25 Oct 2026 22:05:29 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+{"lugares": [{"id": 1, "name": "Tokio", "visited": false}, {"id": 2, "name": "Budapest", "visited": true}, {"id": 3, "name": "Nairobi", "visited": false}, {"id": 4, "name": "Berl\u00edn", "visited": true}, {"id": 5, "name": "Lisboa", "visited": true}, {"id": 6, "name": "Denver", "visited": false}, {"id": 7, "name": "Mosc\u00fa", "visited": false}, {"id": 8, "name": "Oslo", "visited": false}, {"id": 9, "name": "R\u00edo", "visited": true}, {"id": 10, "name": "Cincinnati", "visited": false}, {"id": 11, "name": "Helsinki", "visited": false}], "total": 11}
+### 6. Número de registros en PostgreSQL
+ count 
+-------
+    11
+(1 row)
+
+
+### 7. Tablas de PostgreSQL
+        List of relations
+ Schema |  Name  | Type  | Owner  
+--------+--------+-------+--------
+ public | places | table | alumno
+(1 row)
+
+
+### 8. Comprobación de pgAdmin
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100     4  100     4    0     0    577      0 --:--:-- --:--:-- --:--:--   666
+HTTP/1.1 200 OK
+Server: gunicorn
+Date: Sun, 25 Oct 2026 22:05:29 GMT
+Connection: keep-alive
+Content-Type: text/html; charset=utf-8
+Content-Length: 4
+Vary: Accept-Encoding
+X-Frame-Options: SAMEORIGIN
+Content-Security-Policy: default-src 'self' ws: http: data: blob:; script-src 'self' 'nonce-8mcJAYvPyQ0PJPvKqjW3Fw'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self';
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cross-Origin-Opener-Policy: same-origin
+Set-Cookie: pga4_session=223d7372-debd-4f7e-812a-c6dfaefc02c3!buhkUzjh4TSgcmVj/V0oyWsvrjTSHIgoUCw2vW6FfZQ=; Expires=Mon, 26 Oct 2026 22:05:29 GMT; HttpOnly; Path=/; SameSite=Lax
+
+PING
+### 9. Persistencia del contador
+4
+{"visitas": 5}
+
+### 10. Reinicio de Django y persistencia
+ Container dpl-django Restarting 
+ Container dpl-django Started 
+{"visitas": 6}
+
+### 11. Reinicio de PostgreSQL y persistencia
+ Container dpl-db Restarting 
+ Container dpl-db Started 
+ count 
+-------
+    11
+(1 row)
+
+
+### 12. Script de despliegue
+[1/3] Construyendo imágenes...
+ Image dpl-app-app Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 488B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.28kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.12-slim
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 264B done
+#4 DONE 0.0s
+
+#5 [1/6] FROM docker.io/library/python:3.12-slim@sha256:02108f5d322dd89f1c9e552442c25acb0543dfdbc455693a5599624f20d9155d
+#5 resolve docker.io/library/python:3.12-slim@sha256:02108f5d322dd89f1c9e552442c25acb0543dfdbc455693a5599624f20d9155d 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 419B done
+#6 DONE 0.0s
+
+#7 [3/6] COPY requirements.txt .
+#7 CACHED
+
+#8 [5/6] COPY . .
+#8 CACHED
+
+#9 [2/6] WORKDIR /app
+#9 CACHED
+
+#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 CACHED
+
+#11 [6/6] RUN useradd --create-home --uid 1000 appuser     && mkdir -p /data     && chown appuser:appuser /data
+#11 CACHED
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers done
+#12 exporting manifest sha256:ce41e6a29eb9a021991147af4e5ef5187e57f847f2d527a13f81743a482b80f4 done
+#12 exporting config sha256:57fe950584c446f515a7a7011037fce542593e1083103e8cbb69f27b6eff4a89 done
+#12 exporting attestation manifest sha256:1c8cc26c06bab72385ae996dc75b4e991cdf8ed4338620d5823c16c745242705 0.0s done
+#12 exporting manifest list sha256:d97ade7e9dfa074a60675c5922281601545ace1a962c96c6d893171582620487 0.0s done
+#12 naming to docker.io/library/dpl-app-app:latest done
+#12 unpacking to docker.io/library/dpl-app-app:latest 0.0s done
+#12 DONE 0.1s
+
+#13 resolving provenance for metadata file
+#13 DONE 0.0s
+ Image dpl-app-app Built 
+[2/3] Arrancando servicios...
+ Container dpl-nginx Running 
+ Container dpl-db Running 
+ Container dpl-pgadmin Running 
+ Container dpl-django Running 
+ Container dpl-db Waiting 
+ Container dpl-db Waiting 
+ Container dpl-db Healthy 
+ Container dpl-django Waiting 
+ Container dpl-db Healthy 
+ Container dpl-django Healthy 
+[3/3] Esperando a que la aplicación esté sana...
+Despliegue OK: http://localhost:8000/healthz responde 200
+Código de salida de deploy.sh: 0
+
+### 13. Permisos de deploy.sh
+-rwxrwxr-x 1 aperez aperez 713 oct 25 20:29 deploy.sh
+
+### 14. Estado final
+NAME          IMAGE                                                                     COMMAND                  SERVICE   CREATED             STATUS                       PORTS
+dpl-db        postgres:16-alpine                                                        "docker-entrypoint.s…"   db        About an hour ago   Up 13 seconds (healthy)      5432/tcp
+dpl-django    sha256:e7f43aaa26765fa2fcf545d6c099dd62aa29075a8b2528a7e666dda2b2e1354c   "gunicorn config.wsg…"   app       About an hour ago   Up 18 seconds (healthy)      8000/tcp
+dpl-nginx     nginx:1.27-alpine                                                         "/docker-entrypoint.…"   nginx     About an hour ago   Up About an hour             0.0.0.0:8000->80/tcp, [::]:8000->80/tcp
+dpl-pgadmin   dpage/pgadmin4:9.17                                                       "/entrypoint.sh"         pgadmin   About an hour ago   Up About an hour (healthy)   443/tcp, 0.0.0.0:5050->80/tcp, [::]:5050->80/tcp
